@@ -13,10 +13,6 @@ inputs:
     description: pathname or URL of a Dockerfile
     required: false
     default: ./Dockerfile
-  format:
-    description: format of the built images manifest and metadata
-    required: false
-    default: oci
   build-arg:
     description: argument=value to supply to the builder
     required: false
@@ -25,7 +21,10 @@ inputs:
     description: directory in which to find the Dockerfile
     required: false
     default: .
-
+  target-dir:
+    description: directory in which to build the archive
+    required: false
+    default: test
 runs:
   using: composite
   steps:
@@ -45,11 +44,11 @@ runs:
           echo -e "${CYAN}[ INFO ] > Build args are the following${BLANK}"
           echo "${BUILD_ARGS}"
       fi
-      mkdir -p ${TARGET_DIR}
+      mkdir -p ${{ inputs.target-dir}}
 
       executor --context ${{ inputs.working-dir }} \
               --dockerfile ${{ inputs.file }} \
-              --tarPath=./${{ inputs.img-name }}.tar \
+              --tarPath=${{ inputs.target-dir}}/${{ inputs.img-name }}.tar \
               --destination=${{ inputs.img-name }}:${{ inputs.tag }} \
               --skip-tls-verify-pull \
               --skip-tls-verify \
@@ -58,7 +57,7 @@ runs:
 
       if [[ $? = 0 ]]
       then
-        size=$(du -sh ./${{ inputs.img-name }}.tar | awk '{print $1}')
+        size=$(du -sh ${{ inputs.target-dir}}/${{ inputs.img-name }}.tar | awk '{print $1}')
         echo -e "${GREEN}[ SUCCESS ] > Docker image ${{ inputs.img-name }}:${{ inputs.tag }} successfully built with Kaniko. SIZE --> [ ${size} ]${BLANK}"
       else
         echo -e "${RED}[ FAIL ] > Docker image ${{ inputs.img-name }}:${{ inputs.tag }} failed to build with Kaniko !.${BLANK}"

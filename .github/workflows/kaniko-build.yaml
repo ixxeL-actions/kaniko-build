@@ -28,4 +28,4 @@ jobs:
         format: oci
         build-arg: ''
         working-dir: .
-        target-dir: .
+        target-dir: test
