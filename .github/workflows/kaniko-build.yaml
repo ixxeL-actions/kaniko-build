@@ -24,7 +24,7 @@ jobs:
       with:
         img-name: test
         tag: v1.0
-        file: '""'
+        file: './Dockerfile'
         format: oci
         build-arg: ''
         working-dir: .
