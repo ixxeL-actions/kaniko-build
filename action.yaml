@@ -58,7 +58,8 @@ runs:
       if [[ $? = 0 ]]
       then
         size=$(du -sh ${{ inputs.target-dir}}/${{ inputs.img-name }}.tar | awk '{print $1}')
-        echo -e "${GREEN}[ SUCCESS ] > Docker image ${{ inputs.img-name }}:${{ inputs.tag }} successfully built with Kaniko. SIZE --> [ ${size} ]${BLANK}"
+        echo -e "${GREEN}[ SUCCESS ] > Docker image ${{ inputs.img-name }}:${{ inputs.tag }} successfully built with Kaniko.${BLANK}"
+        echo -e "${GREEN}[ SUCCESS ] > ${{ inputs.target-dir}}/${{ inputs.img-name }}.tar size --> [ ${size} ]${BLANK}"
       else
         echo -e "${RED}[ FAIL ] > Docker image ${{ inputs.img-name }}:${{ inputs.tag }} failed to build with Kaniko !.${BLANK}"
         exit 1
